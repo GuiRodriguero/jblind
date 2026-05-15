@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: jblind
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/JBlind
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
