@@ -9,25 +9,25 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class TournamentTest {
 
-    private Tournament tournament;
+	private Tournament tournament;
 
-    @BeforeEach
-    void setUp() {
-        tournament = valid(Tournament.class);
-    }
+	@BeforeEach
+	void setUp() {
+		tournament = valid(Tournament.class);
+	}
 
-    @Test
-    void should_add_level() {
-        TournamentLevel level = valid(TournamentLevel.class);
+	@Test
+	void should_add_level() {
+		TournamentLevel level = valid(TournamentLevel.class);
 
-        tournament.addLevel(level);
+		tournament.addLevel(level);
 
-        assertThat(tournament.getLevels()).contains(level);
-    }
+		assertThat(tournament.getLevels()).contains(level);
+	}
 
-    @Test
-    void should_start_tournament() {
-        assertThat(tournament.startTournament().getStatus()).isEqualTo(IN_PROGRESS);
-    }
+	@Test
+	void should_start_tournament() {
+		assertThat(tournament.startTournament().getStatus()).isEqualTo(IN_PROGRESS);
+	}
 
 }
