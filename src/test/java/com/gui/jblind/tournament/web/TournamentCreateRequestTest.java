@@ -1,7 +1,6 @@
 package com.gui.jblind.tournament.web;
 
 import com.gui.jblind.tournament.Tournament;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static com.gui.jblind.TestBase.valid;
@@ -10,12 +9,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class TournamentCreateRequestTest {
 
-	private TournamentCreateRequest request;
-
-	@BeforeEach
-	void setUp() {
-		request = valid(TournamentCreateRequest.class);
-	}
+	private final TournamentCreateRequest request = valid(TournamentCreateRequest.class);
 
 	@Test
 	void should_convert_to_entity() {
