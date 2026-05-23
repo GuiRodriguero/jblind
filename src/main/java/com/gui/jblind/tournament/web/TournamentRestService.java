@@ -1,0 +1,45 @@
+package com.gui.jblind.tournament.web;
+
+import com.gui.jblind.tournament.TournamentService;
+import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
+import java.util.List;
+
+@RestController
+@AllArgsConstructor
+@RequestMapping("/v1/tournaments")
+class TournamentRestService {
+
+	private final TournamentService service;
+
+	@GetMapping
+	public ResponseEntity<List<TournamentSummaryResponse>> listTournaments() {
+		return ResponseEntity.ok(service.listAllTournaments());
+	}
+
+	@PostMapping
+	public ResponseEntity<Void> createTournament(@Valid @RequestBody TournamentCreateRequest request) {
+		Long id = service.createTournament(request);
+
+		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(id).toUri();
+
+		return ResponseEntity.created(location).build();
+	}
+
+	@GetMapping("/{id}")
+	public ResponseEntity<TournamentDetailResponse> getById(@PathVariable Long id) {
+		return ResponseEntity.ok(service.getTournamentById(id));
+	}
+
+	@PostMapping("/{id}/play")
+	public ResponseEntity<Void> playTournament(@PathVariable Long id) {
+		service.playTournament(id);
+		return ResponseEntity.noContent().build();
+	}
+
+}
