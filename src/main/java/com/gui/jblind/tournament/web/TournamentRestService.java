@@ -22,7 +22,7 @@ class TournamentRestService {
 		return ResponseEntity.ok(service.listAllTournaments());
 	}
 
-	@PostMapping
+	@PostMapping("/new")
 	public ResponseEntity<Void> createTournament(@Valid @RequestBody TournamentCreateRequest request) {
 		Long id = service.createTournament(request);
 

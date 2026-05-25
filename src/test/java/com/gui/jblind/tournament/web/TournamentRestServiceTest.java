@@ -49,7 +49,7 @@ class TournamentRestServiceTest {
 	void should_create_tournament() throws Exception {
 		when(service.createTournament(any())).thenReturn(1L);
 
-		mockMvc.perform(post("/v1/tournaments").contentType(MediaType.APPLICATION_JSON).content("""
+		mockMvc.perform(post("/v1/tournaments/new").contentType(MediaType.APPLICATION_JSON).content("""
 				{
 				  "name": "Tournament Name",
 				  "scheduledAt": "2023-12-01T10:00:00",
