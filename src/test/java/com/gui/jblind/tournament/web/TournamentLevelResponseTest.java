@@ -17,7 +17,7 @@ class TournamentLevelResponseTest {
 
 	private TournamentLevelResponse expected(TournamentLevel entity) {
 		return new TournamentLevelResponse(entity.getRoundNumber(), entity.getSmallBlind(), entity.getBigBlind(),
-				entity.getAnte(), entity.getDurationInMinutes(), entity.isBreak());
+				entity.getAnte(), entity.getDurationInMinutes(), entity.isBreak(), entity.isShouldColorUp());
 	}
 
 }

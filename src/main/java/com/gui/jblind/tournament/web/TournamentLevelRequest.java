@@ -3,7 +3,7 @@ package com.gui.jblind.tournament.web;
 import com.gui.jblind.tournament.TournamentLevel;
 
 public record TournamentLevelRequest(Integer roundNumber, Integer smallBlind, Integer bigBlind, Integer ante,
-		Integer durationInMinutes, boolean isBreak) {
+		Integer durationInMinutes, boolean isBreak, boolean shouldColorUp) {
 
 	public static TournamentLevel to(TournamentLevelRequest request) {
 		return TournamentLevel.builder()
@@ -13,6 +13,7 @@ public record TournamentLevelRequest(Integer roundNumber, Integer smallBlind, In
 			.ante(request.ante())
 			.durationInMinutes(request.durationInMinutes())
 			.isBreak(request.isBreak())
+			.shouldColorUp(request.shouldColorUp())
 			.build();
 	}
 }
