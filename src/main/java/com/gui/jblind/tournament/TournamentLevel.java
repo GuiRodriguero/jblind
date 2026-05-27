@@ -35,4 +35,6 @@ public class TournamentLevel {
 
 	private boolean isBreak;
 
+	private boolean shouldColorUp;
+
 }

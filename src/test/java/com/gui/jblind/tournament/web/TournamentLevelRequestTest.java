@@ -23,6 +23,7 @@ class TournamentLevelRequestTest {
 			.ante(request.ante())
 			.durationInMinutes(request.durationInMinutes())
 			.isBreak(request.isBreak())
+			.shouldColorUp(request.shouldColorUp())
 			.build();
 	}
 
