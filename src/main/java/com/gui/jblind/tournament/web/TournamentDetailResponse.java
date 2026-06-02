@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public record TournamentDetailResponse(Long id, String name, LocalDateTime scheduledAt, Integer expectedPlayers,
+public record TournamentDetailResponse(String id, String name, LocalDateTime scheduledAt, Integer expectedPlayers,
 		BigDecimal buyIn, Integer startingStack, String status, List<TournamentLevelResponse> levels) {
 
 	public static TournamentDetailResponse of(Tournament entity) {

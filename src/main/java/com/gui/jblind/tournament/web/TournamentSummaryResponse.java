@@ -5,7 +5,7 @@ import com.gui.jblind.tournament.Tournament;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-public record TournamentSummaryResponse(Long id, String name, LocalDateTime scheduledAt, Integer expectedPlayers,
+public record TournamentSummaryResponse(String id, String name, LocalDateTime scheduledAt, Integer expectedPlayers,
 		BigDecimal buyIn, String status) {
 
 	public static TournamentSummaryResponse of(Tournament entity) {

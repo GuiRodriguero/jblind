@@ -1,12 +1,11 @@
 package com.gui.jblind.tournament;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.*;
 
-import static jakarta.persistence.GenerationType.IDENTITY;
+import static java.util.UUID.randomUUID;
 import static lombok.AccessLevel.PACKAGE;
 import static lombok.AccessLevel.PRIVATE;
 
@@ -20,8 +19,7 @@ import static lombok.AccessLevel.PRIVATE;
 public class TournamentLevel {
 
 	@Id
-	@GeneratedValue(strategy = IDENTITY)
-	private Long id;
+	private String id = randomUUID().toString();
 
 	private Integer roundNumber;
 

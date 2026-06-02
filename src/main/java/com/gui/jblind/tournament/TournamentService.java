@@ -20,7 +20,7 @@ public class TournamentService {
 
 	private final TournamentRepository repository;
 
-	public Long createTournament(TournamentCreateRequest request) {
+	public String createTournament(TournamentCreateRequest request) {
 		return repository.save(TournamentCreateRequest.to(request)).getId();
 	}
 
@@ -30,13 +30,13 @@ public class TournamentService {
 	}
 
 	@Transactional(readOnly = true)
-	public TournamentDetailResponse getTournamentById(Long id) {
+	public TournamentDetailResponse getTournamentById(String id) {
 		return repository.findById(id)
 			.map(TournamentDetailResponse::of)
 			.orElseThrow(() -> new ResourceNotFoundException("Tournament not found with id: " + id));
 	}
 
-	public void playTournament(Long id) {
+	public void playTournament(String id) {
 		Tournament tournament = repository.findById(id)
 			.orElseThrow(() -> new ResourceNotFoundException("Tournament not found with id: " + id));
 

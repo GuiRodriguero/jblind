@@ -1,15 +1,20 @@
 package com.gui.jblind.tournament.web;
 
+import com.gui.jblind.TestBase;
 import com.gui.jblind.tournament.Tournament;
 import org.junit.jupiter.api.Test;
 
-import static com.gui.jblind.TestBase.valid;
 import static com.gui.jblind.tournament.TournamentStatus.SCHEDULED;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class TournamentCreateRequestTest {
+class TournamentCreateRequestTest extends TestBase {
 
 	private final TournamentCreateRequest request = valid(TournamentCreateRequest.class);
+
+	@Override
+	public void init() {
+		// empty
+	}
 
 	@Test
 	void should_convert_to_entity() {
