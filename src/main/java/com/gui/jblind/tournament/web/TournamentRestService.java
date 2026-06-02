@@ -24,7 +24,7 @@ class TournamentRestService {
 
 	@PostMapping("/new")
 	public ResponseEntity<Void> createTournament(@Valid @RequestBody TournamentCreateRequest request) {
-		Long id = service.createTournament(request);
+		String id = service.createTournament(request);
 
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(id).toUri();
 
@@ -32,12 +32,12 @@ class TournamentRestService {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<TournamentDetailResponse> getById(@PathVariable Long id) {
+	public ResponseEntity<TournamentDetailResponse> getById(@PathVariable String id) {
 		return ResponseEntity.ok(service.getTournamentById(id));
 	}
 
 	@PostMapping("/{id}/play")
-	public ResponseEntity<Void> playTournament(@PathVariable Long id) {
+	public ResponseEntity<Void> playTournament(@PathVariable String id) {
 		service.playTournament(id);
 		return ResponseEntity.noContent().build();
 	}

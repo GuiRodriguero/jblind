@@ -10,7 +10,7 @@ import java.util.List;
 
 import static com.gui.jblind.tournament.TournamentStatus.IN_PROGRESS;
 import static jakarta.persistence.CascadeType.ALL;
-import static jakarta.persistence.GenerationType.IDENTITY;
+import static java.util.UUID.randomUUID;
 import static lombok.AccessLevel.PACKAGE;
 import static lombok.AccessLevel.PRIVATE;
 
@@ -24,8 +24,7 @@ import static lombok.AccessLevel.PRIVATE;
 public class Tournament {
 
 	@Id
-	@GeneratedValue(strategy = IDENTITY)
-	private Long id;
+	private final String id = randomUUID().toString();
 
 	private String name;
 
