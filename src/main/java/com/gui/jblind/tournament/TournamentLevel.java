@@ -19,6 +19,7 @@ import static lombok.AccessLevel.PRIVATE;
 public class TournamentLevel {
 
 	@Id
+	@Builder.Default
 	private String id = randomUUID().toString();
 
 	private Integer roundNumber;
