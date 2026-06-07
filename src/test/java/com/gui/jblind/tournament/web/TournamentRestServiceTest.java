@@ -17,8 +17,7 @@ import static java.util.UUID.randomUUID;
 import static org.instancio.Select.field;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -104,6 +103,13 @@ class TournamentRestServiceTest extends TestBase {
 		mockMvc.perform(post("/v1/tournaments/" + TOURNAMENT_ID + "/play")).andExpect(status().isNoContent());
 
 		verify(service).playTournament(TOURNAMENT_ID);
+	}
+
+	@Test
+	void should_delete_tournament() throws Exception {
+		mockMvc.perform(delete("/v1/tournaments/" + TOURNAMENT_ID)).andExpect(status().isNoContent());
+
+		verify(service).deleteTournament(TOURNAMENT_ID);
 	}
 
 }

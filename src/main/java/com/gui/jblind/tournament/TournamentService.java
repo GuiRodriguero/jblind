@@ -47,4 +47,12 @@ public class TournamentService {
 		repository.save(tournament.startTournament());
 	}
 
+	public void deleteTournament(String id) {
+		if (!repository.existsById(id)) {
+			throw new ResourceNotFoundException("Tournament not found with id: " + id);
+		}
+
+		repository.deleteById(id);
+	}
+
 }

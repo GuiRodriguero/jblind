@@ -145,4 +145,28 @@ class TournamentServiceTest extends TestBase {
 		inOrder.verifyNoMoreInteractions();
 	}
 
+	@Test
+	void should_delete_tournament() {
+		when(repository.existsById(TOURNAMENT_ID)).thenReturn(true);
+
+		service.deleteTournament(TOURNAMENT_ID);
+
+		InOrder inOrder = inOrder(repository);
+		inOrder.verify(repository).existsById(TOURNAMENT_ID);
+		inOrder.verify(repository).deleteById(TOURNAMENT_ID);
+		inOrder.verifyNoMoreInteractions();
+	}
+
+	@Test
+	void should_throw_exception_when_deleting_non_existent_tournament() {
+		when(repository.existsById(TOURNAMENT_ID)).thenReturn(false);
+
+		assertThatThrownBy(() -> service.deleteTournament(TOURNAMENT_ID)).isInstanceOf(ResourceNotFoundException.class)
+			.hasMessage("Tournament not found with id: " + TOURNAMENT_ID);
+
+		InOrder inOrder = inOrder(repository);
+		inOrder.verify(repository).existsById(TOURNAMENT_ID);
+		inOrder.verifyNoMoreInteractions();
+	}
+
 }

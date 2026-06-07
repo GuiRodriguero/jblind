@@ -42,4 +42,10 @@ class TournamentRestService {
 		return ResponseEntity.noContent().build();
 	}
 
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Void> deleteTournament(@PathVariable String id) {
+		service.deleteTournament(id);
+		return ResponseEntity.noContent().build();
+	}
+
 }
