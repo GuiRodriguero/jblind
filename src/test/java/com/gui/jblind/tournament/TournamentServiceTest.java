@@ -3,8 +3,8 @@ package com.gui.jblind.tournament;
 import com.gui.jblind.TestBase;
 import com.gui.jblind.core.exception.BusinessException;
 import com.gui.jblind.core.exception.ResourceNotFoundException;
-import com.gui.jblind.tournament.web.TournamentCreateRequest;
 import com.gui.jblind.tournament.web.TournamentDetailResponse;
+import com.gui.jblind.tournament.web.TournamentRequest;
 import com.gui.jblind.tournament.web.TournamentSummaryResponse;
 import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
@@ -18,8 +18,7 @@ import static com.gui.jblind.tournament.TournamentStatus.IN_PROGRESS;
 import static com.gui.jblind.tournament.TournamentTemplateLoader.finished;
 import static com.gui.jblind.tournament.TournamentTemplateLoader.scheduled;
 import static java.util.UUID.randomUUID;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.when;
 
@@ -39,8 +38,8 @@ class TournamentServiceTest extends TestBase {
 
 	@Test
 	void should_create_tournament() {
-		TournamentCreateRequest request = valid(TournamentCreateRequest.class);
-		Tournament tournament = TournamentCreateRequest.to(request);
+		TournamentRequest request = valid(TournamentRequest.class);
+		Tournament tournament = TournamentRequest.to(request);
 
 		when(repository.save(tournament)).thenReturn(tournament);
 
@@ -162,6 +161,33 @@ class TournamentServiceTest extends TestBase {
 		when(repository.existsById(TOURNAMENT_ID)).thenReturn(false);
 
 		assertThatThrownBy(() -> service.deleteTournament(TOURNAMENT_ID)).isInstanceOf(ResourceNotFoundException.class)
+			.hasMessage("Tournament not found with id: " + TOURNAMENT_ID);
+
+		InOrder inOrder = inOrder(repository);
+		inOrder.verify(repository).existsById(TOURNAMENT_ID);
+		inOrder.verifyNoMoreInteractions();
+	}
+
+	@Test
+	void should_update_tournament() {
+		TournamentRequest request = valid(TournamentRequest.class);
+		when(repository.existsById(TOURNAMENT_ID)).thenReturn(true);
+
+		assertThatCode(() -> service.updateTournament(TOURNAMENT_ID, request)).doesNotThrowAnyException();
+
+		InOrder inOrder = inOrder(repository);
+		inOrder.verify(repository).existsById(TOURNAMENT_ID);
+		inOrder.verify(repository).save(TournamentRequest.to(TOURNAMENT_ID, request));
+		inOrder.verifyNoMoreInteractions();
+	}
+
+	@Test
+	void should_throw_exception_when_updating_non_existent_tournament() {
+		TournamentRequest request = valid(TournamentRequest.class);
+		when(repository.existsById(TOURNAMENT_ID)).thenReturn(false);
+
+		assertThatThrownBy(() -> service.updateTournament(TOURNAMENT_ID, request))
+			.isInstanceOf(ResourceNotFoundException.class)
 			.hasMessage("Tournament not found with id: " + TOURNAMENT_ID);
 
 		InOrder inOrder = inOrder(repository);

@@ -2,8 +2,8 @@ package com.gui.jblind.tournament;
 
 import com.gui.jblind.core.exception.BusinessException;
 import com.gui.jblind.core.exception.ResourceNotFoundException;
-import com.gui.jblind.tournament.web.TournamentCreateRequest;
 import com.gui.jblind.tournament.web.TournamentDetailResponse;
+import com.gui.jblind.tournament.web.TournamentRequest;
 import com.gui.jblind.tournament.web.TournamentSummaryResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,8 +20,8 @@ public class TournamentService {
 
 	private final TournamentRepository repository;
 
-	public String createTournament(TournamentCreateRequest request) {
-		return repository.save(TournamentCreateRequest.to(request)).getId();
+	public String createTournament(TournamentRequest request) {
+		return repository.save(TournamentRequest.to(request)).getId();
 	}
 
 	@Transactional(readOnly = true)
@@ -53,6 +53,14 @@ public class TournamentService {
 		}
 
 		repository.deleteById(id);
+	}
+
+	public void updateTournament(String id, TournamentRequest request) {
+		if (!repository.existsById(id)) {
+			throw new ResourceNotFoundException("Tournament not found with id: " + id);
+		}
+
+		repository.save(TournamentRequest.to(id, request));
 	}
 
 }

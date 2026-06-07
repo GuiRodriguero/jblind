@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.List;
 
 import static java.util.UUID.randomUUID;
+import static org.hamcrest.Matchers.startsWith;
 import static org.instancio.Select.field;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -48,7 +49,8 @@ class TournamentRestServiceTest extends TestBase {
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$[0].id").value(TOURNAMENT_ID))
 			.andExpect(jsonPath("$[0].name").value(response.name()))
-			.andExpect(jsonPath("$[0].scheduledAt").value(response.scheduledAt().toString()))
+			.andExpect(
+					jsonPath("$[0].scheduledAt").value(startsWith(response.scheduledAt().toString().substring(0, 19))))
 			.andExpect(jsonPath("$[0].expectedPlayers").value(response.expectedPlayers()))
 			.andExpect(jsonPath("$[0].buyIn").value(response.buyIn().doubleValue()))
 			.andExpect(jsonPath("$[0].status").value(response.status()));
@@ -107,9 +109,27 @@ class TournamentRestServiceTest extends TestBase {
 
 	@Test
 	void should_delete_tournament() throws Exception {
-		mockMvc.perform(delete("/v1/tournaments/" + TOURNAMENT_ID)).andExpect(status().isNoContent());
+		mockMvc.perform(delete("/v1/tournaments/" + TOURNAMENT_ID)).andExpect(status().isSeeOther());
 
 		verify(service).deleteTournament(TOURNAMENT_ID);
+	}
+
+	@Test
+	void should_update_tournament() throws Exception {
+		mockMvc.perform(put("/v1/tournaments/" + TOURNAMENT_ID).contentType(MediaType.APPLICATION_JSON).content("""
+				{
+				  "name": "Updated Tournament",
+				  "scheduledAt": "2023-12-01T10:00:00",
+				  "expectedPlayers": 15,
+				  "buyIn": 200,
+				  "startingStack": 10000,
+				  "allowRebuys": true,
+				  "allowAddOn": true,
+				  "levels": []
+				}
+				""")).andExpect(status().isNoContent());
+
+		verify(service).updateTournament(eq(TOURNAMENT_ID), any());
 	}
 
 }

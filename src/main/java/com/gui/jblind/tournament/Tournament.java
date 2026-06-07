@@ -24,6 +24,7 @@ import static lombok.AccessLevel.PRIVATE;
 public class Tournament {
 
 	@Id
+	@Builder.Default
 	private final String id = randomUUID().toString();
 
 	private String name;
