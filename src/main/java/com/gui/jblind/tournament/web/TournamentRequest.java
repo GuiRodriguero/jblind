@@ -33,20 +33,6 @@ public record TournamentRequest(@NotBlank String name, @NotNull LocalDateTime sc
 	}
 
 	public static Tournament to(String id, TournamentRequest request) {
-		Tournament tournament = Tournament.builder()
-			.id(id)
-			.name(request.name())
-			.scheduledAt(request.scheduledAt())
-			.expectedPlayers(request.expectedPlayers())
-			.buyIn(request.buyIn())
-			.startingStack(request.startingStack())
-			.allowRebuys(request.allowRebuys())
-			.allowAddOn(request.allowAddOn())
-			.status(SCHEDULED)
-			.build();
-
-		request.levels().forEach(level -> tournament.addLevel(TournamentLevelRequest.to(level)));
-
-		return tournament;
+		return to(request).toBuilder().id(id).build();
 	}
 }
