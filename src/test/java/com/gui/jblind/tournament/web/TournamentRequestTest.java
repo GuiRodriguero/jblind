@@ -4,12 +4,14 @@ import com.gui.jblind.TestBase;
 import com.gui.jblind.tournament.Tournament;
 import org.junit.jupiter.api.Test;
 
+import java.util.UUID;
+
 import static com.gui.jblind.tournament.TournamentStatus.SCHEDULED;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class TournamentCreateRequestTest extends TestBase {
+class TournamentRequestTest extends TestBase {
 
-	private final TournamentCreateRequest request = valid(TournamentCreateRequest.class);
+	private final TournamentRequest request = valid(TournamentRequest.class);
 
 	@Override
 	public void init() {
@@ -18,10 +20,16 @@ class TournamentCreateRequestTest extends TestBase {
 
 	@Test
 	void should_convert_to_entity() {
-		assertThat(TournamentCreateRequest.to(request)).isEqualTo(expected(request));
+		assertThat(TournamentRequest.to(request)).isEqualTo(expected(request));
 	}
 
-	private Tournament expected(TournamentCreateRequest request) {
+	@Test
+	void should_convert_to_entity_with_id() {
+		String id = UUID.randomUUID().toString();
+		assertThat(TournamentRequest.to(id, request)).isEqualTo(expectedWithId(id, request));
+	}
+
+	private Tournament expected(TournamentRequest request) {
 		Tournament tournament = Tournament.builder()
 			.name(request.name())
 			.scheduledAt(request.scheduledAt())
@@ -36,6 +44,10 @@ class TournamentCreateRequestTest extends TestBase {
 		request.levels().forEach(level -> tournament.addLevel(TournamentLevelRequest.to(level)));
 
 		return tournament;
+	}
+
+	private Tournament expectedWithId(String id, TournamentRequest request) {
+		return expected(request).toBuilder().id(id).build();
 	}
 
 }

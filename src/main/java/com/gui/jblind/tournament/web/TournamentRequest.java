@@ -11,11 +11,11 @@ import java.util.List;
 
 import static com.gui.jblind.tournament.TournamentStatus.SCHEDULED;
 
-public record TournamentCreateRequest(@NotBlank String name, @NotNull LocalDateTime scheduledAt,
+public record TournamentRequest(@NotBlank String name, @NotNull LocalDateTime scheduledAt,
 		@Positive Integer expectedPlayers, @Positive BigDecimal buyIn, @Positive Integer startingStack,
 		boolean allowRebuys, boolean allowAddOn, List<TournamentLevelRequest> levels) {
 
-	public static Tournament to(TournamentCreateRequest request) {
+	public static Tournament to(TournamentRequest request) {
 		Tournament tournament = Tournament.builder()
 			.name(request.name())
 			.scheduledAt(request.scheduledAt())
@@ -30,5 +30,9 @@ public record TournamentCreateRequest(@NotBlank String name, @NotNull LocalDateT
 		request.levels().forEach(level -> tournament.addLevel(TournamentLevelRequest.to(level)));
 
 		return tournament;
+	}
+
+	public static Tournament to(String id, TournamentRequest request) {
+		return to(request).toBuilder().id(id).build();
 	}
 }

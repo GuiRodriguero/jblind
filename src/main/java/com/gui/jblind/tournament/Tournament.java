@@ -17,13 +17,14 @@ import static lombok.AccessLevel.PRIVATE;
 @Table
 @Entity
 @Getter
-@Builder
 @EqualsAndHashCode
+@Builder(toBuilder = true)
 @NoArgsConstructor(access = PRIVATE)
 @AllArgsConstructor(staticName = "of", access = PACKAGE)
 public class Tournament {
 
 	@Id
+	@Builder.Default
 	private final String id = randomUUID().toString();
 
 	private String name;

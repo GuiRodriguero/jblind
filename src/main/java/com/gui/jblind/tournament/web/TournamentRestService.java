@@ -23,7 +23,7 @@ class TournamentRestService {
 	}
 
 	@PostMapping("/new")
-	public ResponseEntity<Void> createTournament(@Valid @RequestBody TournamentCreateRequest request) {
+	public ResponseEntity<Void> createTournament(@Valid @RequestBody TournamentRequest request) {
 		String id = service.createTournament(request);
 
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(id).toUri();
@@ -39,6 +39,19 @@ class TournamentRestService {
 	@PostMapping("/{id}/play")
 	public ResponseEntity<Void> playTournament(@PathVariable String id) {
 		service.playTournament(id);
+		return ResponseEntity.noContent().build();
+	}
+
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Void> deleteTournament(@PathVariable String id) {
+		service.deleteTournament(id);
+		return ResponseEntity.status(303).header("Location", "http://localhost:5173/tournaments").build();
+	}
+
+	@PutMapping("/{id}")
+	public ResponseEntity<Void> updateTournament(@PathVariable String id,
+			@Valid @RequestBody TournamentRequest request) {
+		service.updateTournament(id, request);
 		return ResponseEntity.noContent().build();
 	}
 
