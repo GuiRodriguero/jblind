@@ -38,10 +38,12 @@ class TournamentRequestTest extends TestBase {
 			.startingStack(request.startingStack())
 			.allowRebuys(request.allowRebuys())
 			.allowAddOn(request.allowAddOn())
+			.prize(TournamentPrizeRequest.to(request.prize()))
 			.status(SCHEDULED)
 			.build();
 
 		request.levels().forEach(level -> tournament.addLevel(TournamentLevelRequest.to(level)));
+		request.players().forEach(player -> tournament.addPlayer(TournamentPlayerRequest.to(player)));
 
 		return tournament;
 	}

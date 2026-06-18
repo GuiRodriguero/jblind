@@ -49,8 +49,21 @@ public class Tournament {
 	@OneToMany(cascade = ALL, orphanRemoval = true)
 	private List<TournamentLevel> levels = new ArrayList<>();
 
+	@Builder.Default
+	@JoinColumn(name = "tournament_id")
+	@OneToMany(cascade = ALL, orphanRemoval = true)
+	private List<TournamentPlayer> players = new ArrayList<>();
+
+	@OneToOne(cascade = ALL, orphanRemoval = true)
+	@JoinColumn(name = "prize_id")
+	private TournamentPrize prize;
+
 	public void addLevel(TournamentLevel level) {
 		levels.add(level);
+	}
+
+	public void addPlayer(TournamentPlayer player) {
+		players.add(player);
 	}
 
 	public Tournament startTournament() {
