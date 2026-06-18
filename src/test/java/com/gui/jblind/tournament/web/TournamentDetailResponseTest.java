@@ -18,7 +18,9 @@ class TournamentDetailResponseTest {
 	private TournamentDetailResponse expected(Tournament entity) {
 		return new TournamentDetailResponse(entity.getId(), entity.getName(), entity.getScheduledAt(),
 				entity.getExpectedPlayers(), entity.getBuyIn(), entity.getStartingStack(), entity.getStatus().name(),
-				entity.getLevels().stream().map(TournamentLevelResponse::of).toList());
+				entity.getLevels().stream().map(TournamentLevelResponse::of).toList(),
+				entity.getPlayers().stream().map(TournamentPlayerResponse::of).toList(),
+				TournamentPrizeResponse.of(entity.getPrize()));
 	}
 
 }

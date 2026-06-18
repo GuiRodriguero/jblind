@@ -10,6 +10,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 
+import static org.springframework.http.HttpStatus.SEE_OTHER;
+
 @RestController
 @AllArgsConstructor
 @RequestMapping("/v1/tournaments")
@@ -45,7 +47,7 @@ class TournamentRestService {
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deleteTournament(@PathVariable String id) {
 		service.deleteTournament(id);
-		return ResponseEntity.status(303).header("Location", "http://localhost:5173/tournaments").build();
+		return ResponseEntity.status(SEE_OTHER).header("Location", "http://localhost:5173/tournaments").build();
 	}
 
 	@PutMapping("/{id}")
