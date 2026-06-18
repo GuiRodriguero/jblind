@@ -1,18 +1,17 @@
 package com.gui.jblind.tournament;
 
-import org.junit.jupiter.api.BeforeEach;
+import com.gui.jblind.TestBase;
 import org.junit.jupiter.api.Test;
 
-import static com.gui.jblind.TestBase.valid;
 import static com.gui.jblind.tournament.TournamentStatus.IN_PROGRESS;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class TournamentTest {
+class TournamentTest extends TestBase {
 
 	private Tournament tournament;
 
-	@BeforeEach
-	void setUp() {
+	@Override
+	public void init() {
 		tournament = valid(Tournament.class);
 	}
 

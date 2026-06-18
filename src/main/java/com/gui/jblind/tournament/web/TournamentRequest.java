@@ -13,7 +13,8 @@ import static com.gui.jblind.tournament.TournamentStatus.SCHEDULED;
 
 public record TournamentRequest(@NotBlank String name, @NotNull LocalDateTime scheduledAt,
 		@Positive Integer expectedPlayers, @Positive BigDecimal buyIn, @Positive Integer startingStack,
-		boolean allowRebuys, boolean allowAddOn, List<TournamentLevelRequest> levels) {
+		boolean allowRebuys, boolean allowAddOn, List<TournamentLevelRequest> levels,
+		List<TournamentPlayerRequest> players, TournamentPrizeRequest prize) {
 
 	public static Tournament to(TournamentRequest request) {
 		Tournament tournament = Tournament.builder()
@@ -24,10 +25,12 @@ public record TournamentRequest(@NotBlank String name, @NotNull LocalDateTime sc
 			.startingStack(request.startingStack())
 			.allowRebuys(request.allowRebuys())
 			.allowAddOn(request.allowAddOn())
+			.prize(TournamentPrizeRequest.to(request.prize()))
 			.status(SCHEDULED)
 			.build();
 
 		request.levels().forEach(level -> tournament.addLevel(TournamentLevelRequest.to(level)));
+		request.players().forEach(player -> tournament.addPlayer(TournamentPlayerRequest.to(player)));
 
 		return tournament;
 	}
