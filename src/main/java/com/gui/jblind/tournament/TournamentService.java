@@ -21,7 +21,7 @@ public class TournamentService {
 	private final TournamentRepository repository;
 
 	public String createTournament(TournamentRequest request) {
-		return repository.save(TournamentRequest.to(request)).getId();
+		return repository.save(request.to()).getId();
 	}
 
 	@Transactional(readOnly = true)
@@ -60,7 +60,7 @@ public class TournamentService {
 			throw new ResourceNotFoundException("Tournament not found with id: " + id);
 		}
 
-		repository.save(TournamentRequest.to(id, request));
+		repository.save(request.to(id));
 	}
 
 }
