@@ -20,13 +20,13 @@ class TournamentRequestTest extends TestBase {
 
 	@Test
 	void should_convert_to_entity() {
-		assertThat(TournamentRequest.to(request)).isEqualTo(expected(request));
+		assertThat(request.to()).isEqualTo(expected(request));
 	}
 
 	@Test
 	void should_convert_to_entity_with_id() {
 		String id = UUID.randomUUID().toString();
-		assertThat(TournamentRequest.to(id, request)).isEqualTo(expectedWithId(id, request));
+		assertThat(request.to(id)).isEqualTo(expectedWithId(id, request));
 	}
 
 	private Tournament expected(TournamentRequest request) {
@@ -38,12 +38,12 @@ class TournamentRequestTest extends TestBase {
 			.startingStack(request.startingStack())
 			.allowRebuys(request.allowRebuys())
 			.allowAddOn(request.allowAddOn())
-			.prize(TournamentPrizeRequest.to(request.prize()))
+			.prize(request.prize().to())
 			.status(SCHEDULED)
 			.build();
 
-		request.levels().forEach(level -> tournament.addLevel(TournamentLevelRequest.to(level)));
-		request.players().forEach(player -> tournament.addPlayer(TournamentPlayerRequest.to(player)));
+		request.levels().forEach(level -> tournament.addLevel(level.to()));
+		request.players().forEach(player -> tournament.addPlayer(player.to()));
 
 		return tournament;
 	}

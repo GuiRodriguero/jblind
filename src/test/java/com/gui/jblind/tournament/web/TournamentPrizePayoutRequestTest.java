@@ -17,7 +17,7 @@ class TournamentPrizePayoutRequestTest extends TestBase {
 
 	@Test
 	void should_convert_to_entity() {
-		assertThat(TournamentPrizePayoutRequest.to(request)).isEqualTo(expected(request));
+		assertThat(request.to()).isEqualTo(expected(request));
 	}
 
 	private TournamentPrizePayout expected(TournamentPrizePayoutRequest request) {

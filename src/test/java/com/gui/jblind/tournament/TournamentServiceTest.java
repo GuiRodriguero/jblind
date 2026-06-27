@@ -39,7 +39,7 @@ class TournamentServiceTest extends TestBase {
 	@Test
 	void should_create_tournament() {
 		TournamentRequest request = valid(TournamentRequest.class);
-		Tournament tournament = TournamentRequest.to(request);
+		Tournament tournament = request.to();
 
 		when(repository.save(tournament)).thenReturn(tournament);
 
@@ -177,7 +177,7 @@ class TournamentServiceTest extends TestBase {
 
 		InOrder inOrder = inOrder(repository);
 		inOrder.verify(repository).existsById(TOURNAMENT_ID);
-		inOrder.verify(repository).save(TournamentRequest.to(TOURNAMENT_ID, request));
+		inOrder.verify(repository).save(request.to(TOURNAMENT_ID));
 		inOrder.verifyNoMoreInteractions();
 	}
 

@@ -6,15 +6,11 @@ import java.util.List;
 
 public record TournamentPrizeRequest(String mode, List<TournamentPrizePayoutRequest> payouts) {
 
-	public static TournamentPrize to(TournamentPrizeRequest request) {
-		if (request == null) {
-			return null;
-		}
+	public TournamentPrize to() {
+		TournamentPrize prize = TournamentPrize.builder().mode(mode).build();
 
-		TournamentPrize prize = TournamentPrize.builder().mode(request.mode()).build();
-
-		if (request.payouts() != null) {
-			request.payouts().forEach(payout -> prize.addPayout(TournamentPrizePayoutRequest.to(payout)));
+		if (payouts != null) {
+			payouts.forEach(payout -> prize.addPayout(payout.to()));
 		}
 
 		return prize;

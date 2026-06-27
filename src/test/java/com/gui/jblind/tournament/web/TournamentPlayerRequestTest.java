@@ -17,7 +17,7 @@ class TournamentPlayerRequestTest extends TestBase {
 
 	@Test
 	void should_convert_to_entity() {
-		assertThat(TournamentPlayerRequest.to(request)).isEqualTo(expected(request));
+		assertThat(request.to()).isEqualTo(expected(request));
 	}
 
 	private TournamentPlayer expected(TournamentPlayerRequest request) {
