@@ -17,25 +17,20 @@ class TournamentPrizeRequestTest extends TestBase {
 
 	@Test
 	void should_convert_to_entity() {
-		assertThat(TournamentPrizeRequest.to(request)).isEqualTo(expected(request));
-	}
-
-	@Test
-	void should_return_null_when_request_is_null() {
-		assertThat(TournamentPrizeRequest.to(null)).isNull();
+		assertThat(request.to()).isEqualTo(expected(request));
 	}
 
 	@Test
 	void should_convert_when_payouts_are_null() {
 		TournamentPrizeRequest request = new TournamentPrizeRequest("FIXED", null);
 
-		assertThat(TournamentPrizeRequest.to(request)).isEqualTo(expected(request));
+		assertThat(request.to()).isEqualTo(expected(request));
 	}
 
 	private TournamentPrize expected(TournamentPrizeRequest request) {
 		TournamentPrize prize = TournamentPrize.builder().mode(request.mode()).build();
 		if (request.payouts() != null) {
-			request.payouts().forEach(payout -> prize.addPayout(TournamentPrizePayoutRequest.to(payout)));
+			request.payouts().forEach(payout -> prize.addPayout(payout.to()));
 		}
 
 		return prize;

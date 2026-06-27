@@ -5,15 +5,15 @@ import com.gui.jblind.tournament.TournamentLevel;
 public record TournamentLevelRequest(Integer roundNumber, Integer smallBlind, Integer bigBlind, Integer ante,
 		Integer durationInMinutes, boolean isBreak, boolean shouldColorUp) {
 
-	public static TournamentLevel to(TournamentLevelRequest request) {
+	public TournamentLevel to() {
 		return TournamentLevel.builder()
-			.roundNumber(request.roundNumber())
-			.smallBlind(request.smallBlind())
-			.bigBlind(request.bigBlind())
-			.ante(request.ante())
-			.durationInMinutes(request.durationInMinutes())
-			.isBreak(request.isBreak())
-			.shouldColorUp(request.shouldColorUp())
+			.roundNumber(roundNumber)
+			.smallBlind(smallBlind)
+			.bigBlind(bigBlind)
+			.ante(ante)
+			.durationInMinutes(durationInMinutes)
+			.isBreak(isBreak)
+			.shouldColorUp(shouldColorUp)
 			.build();
 	}
 }

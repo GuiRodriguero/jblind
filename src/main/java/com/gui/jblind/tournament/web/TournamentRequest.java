@@ -16,26 +16,26 @@ public record TournamentRequest(@NotBlank String name, @NotNull LocalDateTime sc
 		boolean allowRebuys, boolean allowAddOn, List<TournamentLevelRequest> levels,
 		List<TournamentPlayerRequest> players, TournamentPrizeRequest prize) {
 
-	public static Tournament to(TournamentRequest request) {
+	public Tournament to() {
 		Tournament tournament = Tournament.builder()
-			.name(request.name())
-			.scheduledAt(request.scheduledAt())
-			.expectedPlayers(request.expectedPlayers())
-			.buyIn(request.buyIn())
-			.startingStack(request.startingStack())
-			.allowRebuys(request.allowRebuys())
-			.allowAddOn(request.allowAddOn())
-			.prize(TournamentPrizeRequest.to(request.prize()))
+			.name(name)
+			.scheduledAt(scheduledAt)
+			.expectedPlayers(expectedPlayers)
+			.buyIn(buyIn)
+			.startingStack(startingStack)
+			.allowRebuys(allowRebuys)
+			.allowAddOn(allowAddOn)
+			.prize(prize.to())
 			.status(SCHEDULED)
 			.build();
 
-		request.levels().forEach(level -> tournament.addLevel(TournamentLevelRequest.to(level)));
-		request.players().forEach(player -> tournament.addPlayer(TournamentPlayerRequest.to(player)));
+		levels.forEach(level -> tournament.addLevel(level.to()));
+		players.forEach(player -> tournament.addPlayer(player.to()));
 
 		return tournament;
 	}
 
-	public static Tournament to(String id, TournamentRequest request) {
-		return to(request).toBuilder().id(id).build();
+	public Tournament to(String id) {
+		return to().toBuilder().id(id).build();
 	}
 }
