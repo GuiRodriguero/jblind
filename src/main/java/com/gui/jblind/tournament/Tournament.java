@@ -45,6 +45,7 @@ public class Tournament {
 	private TournamentStatus status;
 
 	@Builder.Default
+	@OrderBy("roundNumber ASC")
 	@JoinColumn(name = "tournament_id")
 	@OneToMany(cascade = ALL, orphanRemoval = true)
 	private List<TournamentLevel> levels = new ArrayList<>();

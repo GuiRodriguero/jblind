@@ -1,10 +1,11 @@
 package com.gui.jblind.tournament.web;
 
+import com.gui.jblind.tournament.PrizeMode;
 import com.gui.jblind.tournament.TournamentPrize;
 
 import java.util.List;
 
-public record TournamentPrizeRequest(String mode, List<TournamentPrizePayoutRequest> payouts) {
+public record TournamentPrizeRequest(PrizeMode mode, List<TournamentPrizePayoutRequest> payouts) {
 
 	public TournamentPrize to() {
 		TournamentPrize prize = TournamentPrize.builder().mode(mode).build();

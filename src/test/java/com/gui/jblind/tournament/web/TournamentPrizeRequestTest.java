@@ -4,6 +4,7 @@ import com.gui.jblind.TestBase;
 import com.gui.jblind.tournament.TournamentPrize;
 import org.junit.jupiter.api.Test;
 
+import static com.gui.jblind.tournament.PrizeMode.FIXED;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class TournamentPrizeRequestTest extends TestBase {
@@ -22,7 +23,7 @@ class TournamentPrizeRequestTest extends TestBase {
 
 	@Test
 	void should_convert_when_payouts_are_null() {
-		TournamentPrizeRequest request = new TournamentPrizeRequest("FIXED", null);
+		TournamentPrizeRequest request = new TournamentPrizeRequest(FIXED, null);
 
 		assertThat(request.to()).isEqualTo(expected(request));
 	}
