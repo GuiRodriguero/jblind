@@ -1,10 +1,11 @@
 package com.gui.jblind.tournament.web;
 
+import com.gui.jblind.tournament.PrizeMode;
 import com.gui.jblind.tournament.TournamentPrize;
 
 import java.util.List;
 
-record TournamentPrizeResponse(String mode, List<TournamentPrizePayoutResponse> payouts) {
+record TournamentPrizeResponse(PrizeMode mode, List<TournamentPrizePayoutResponse> payouts) {
 
 	public static TournamentPrizeResponse of(TournamentPrize entity) {
 		if (entity == null) {
