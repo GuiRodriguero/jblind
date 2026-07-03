@@ -17,9 +17,10 @@ class CashGameDetailResponseTest extends TestBase {
 
 	@Test
 	void should_instantiate_from_entity() {
-		assertThat(CashGameDetailResponse.of(entity)).isEqualTo(new CashGameDetailResponse(entity.getId(),
-				entity.getName(), entity.getScheduledAt(), entity.getMinBuyIn(), entity.getMaxBuyIn(),
-				entity.getSmallBlind(), entity.getBigBlind(), entity.getStatus().name()));
+		assertThat(CashGameDetailResponse.of(entity))
+			.isEqualTo(new CashGameDetailResponse(entity.getId(), entity.getName(), entity.getScheduledAt(),
+					entity.getMinBuyIn(), entity.getMaxBuyIn(), entity.getSmallBlind(), entity.getBigBlind(),
+					entity.getStatus().name(), entity.getPlayers().stream().map(CashGamePlayerResponse::of).toList()));
 	}
 
 }
