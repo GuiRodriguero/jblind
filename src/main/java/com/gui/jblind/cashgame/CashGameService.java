@@ -44,7 +44,7 @@ public class CashGameService {
 			throw new BusinessException("Cannot start a cash game that is already finished.");
 		}
 
-		repository.save(cashGame.startCashGame());
+		repository.save(cashGame.start());
 	}
 
 	public void deleteCashGame(String id) {

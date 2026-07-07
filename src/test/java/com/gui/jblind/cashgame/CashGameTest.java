@@ -26,7 +26,7 @@ class CashGameTest extends TestBase {
 
 	@Test
 	void should_start_cash_game() {
-		assertThat(entity.startCashGame().getStatus()).isEqualTo(IN_PROGRESS);
+		assertThat(entity.start().getStatus()).isEqualTo(IN_PROGRESS);
 	}
 
 }

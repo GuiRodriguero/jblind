@@ -51,7 +51,7 @@ public class CashGame {
 		players.add(player);
 	}
 
-	public CashGame startCashGame() {
+	public CashGame start() {
 		this.status = IN_PROGRESS;
 		return this;
 	}
