@@ -56,4 +56,10 @@ class CashGameRestService {
 		return ResponseEntity.noContent().build();
 	}
 
+	@PostMapping("/{id}/players")
+	public ResponseEntity<CashGamePlayerResponse> addPlayer(@PathVariable String id,
+			@Valid @RequestBody CashGamePlayerRequest request) {
+		return ResponseEntity.ok(service.addPlayer(id, request));
+	}
+
 }

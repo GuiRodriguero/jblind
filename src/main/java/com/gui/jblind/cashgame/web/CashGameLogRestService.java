@@ -1,6 +1,7 @@
 package com.gui.jblind.cashgame.web;
 
 import com.gui.jblind.cashgame.CashGameLogService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +16,7 @@ class CashGameLogRestService {
 
 	@PostMapping
 	@ResponseStatus(CREATED)
-	public CashGameLogResponse log(@PathVariable String id, @RequestBody CashGameLogRequest request) {
+	public CashGameLogResponse log(@PathVariable String id, @Valid @RequestBody CashGameLogRequest request) {
 		return service.createLog(id, request);
 	}
 
