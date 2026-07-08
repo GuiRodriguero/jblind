@@ -27,9 +27,14 @@ public class CashGameLog {
 	@Column(nullable = false)
 	private String cashGameId;
 
+	@Column(nullable = false)
+	private String playerId;
+
 	@Enumerated(STRING)
+	@Column(nullable = false)
 	private CashGameLogType type;
 
+	@Column(nullable = false)
 	private BigDecimal amount;
 
 	private String message;

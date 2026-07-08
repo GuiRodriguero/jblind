@@ -1,9 +1,7 @@
 package com.gui.jblind.cashgame;
 
 import com.gui.jblind.TestBase;
-import com.gui.jblind.cashgame.web.CashGameDetailResponse;
-import com.gui.jblind.cashgame.web.CashGameRequest;
-import com.gui.jblind.cashgame.web.CashGameSummaryResponse;
+import com.gui.jblind.cashgame.web.*;
 import com.gui.jblind.core.exception.BusinessException;
 import com.gui.jblind.core.exception.ResourceNotFoundException;
 import org.junit.jupiter.api.Test;
@@ -19,8 +17,7 @@ import static com.gui.jblind.cashgame.CashGameTemplateLoader.finished;
 import static com.gui.jblind.cashgame.CashGameTemplateLoader.scheduled;
 import static java.util.UUID.randomUUID;
 import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.inOrder;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class CashGameServiceTest extends TestBase {
 
@@ -31,9 +28,12 @@ class CashGameServiceTest extends TestBase {
 	@Mock
 	private CashGameRepository repository;
 
+	@Mock
+	private CashGameLogQuery logQuery;
+
 	@Override
 	public void init() {
-		service = new CashGameService(repository);
+		service = new CashGameService(repository, logQuery);
 	}
 
 	@Test
@@ -45,7 +45,7 @@ class CashGameServiceTest extends TestBase {
 
 		assertThat(service.createCashGame(request)).isEqualTo(cashGame.getId());
 
-		InOrder inOrder = inOrder(repository);
+		InOrder inOrder = inOrder(repository, logQuery);
 		inOrder.verify(repository).save(cashGame);
 		inOrder.verifyNoMoreInteractions();
 	}
@@ -59,7 +59,7 @@ class CashGameServiceTest extends TestBase {
 
 		assertThat(result).containsExactly(CashGameSummaryResponse.of(cashGame));
 
-		InOrder inOrder = inOrder(repository);
+		InOrder inOrder = inOrder(repository, logQuery);
 		inOrder.verify(repository).findAll();
 		inOrder.verifyNoMoreInteractions();
 	}
@@ -72,7 +72,7 @@ class CashGameServiceTest extends TestBase {
 
 		assertThat(result).isEmpty();
 
-		InOrder inOrder = inOrder(repository);
+		InOrder inOrder = inOrder(repository, logQuery);
 		inOrder.verify(repository).findAll();
 		inOrder.verifyNoMoreInteractions();
 	}
@@ -80,14 +80,18 @@ class CashGameServiceTest extends TestBase {
 	@Test
 	void should_get_cash_game_by_id() {
 		CashGame cashGame = valid(CashGame.class);
+		List<CashGameLogResponse> logs = valid(CashGameLogResponse.class, 3);
+
 		when(repository.findById(CASH_GAME_ID)).thenReturn(Optional.of(cashGame));
+		when(logQuery.findAllByCashGameId(CASH_GAME_ID)).thenReturn(logs);
 
 		CashGameDetailResponse result = service.getCashGameById(CASH_GAME_ID);
 
-		assertThat(result).isEqualTo(CashGameDetailResponse.of(cashGame));
+		assertThat(result).isEqualTo(CashGameDetailResponse.of(cashGame, logs));
 
-		InOrder inOrder = inOrder(repository);
+		InOrder inOrder = inOrder(repository, logQuery);
 		inOrder.verify(repository).findById(CASH_GAME_ID);
+		inOrder.verify(logQuery).findAllByCashGameId(CASH_GAME_ID);
 		inOrder.verifyNoMoreInteractions();
 	}
 
@@ -98,8 +102,9 @@ class CashGameServiceTest extends TestBase {
 		assertThatThrownBy(() -> service.getCashGameById(CASH_GAME_ID)).isInstanceOf(ResourceNotFoundException.class)
 			.hasMessage("Cash Game not found with id: " + CASH_GAME_ID);
 
-		InOrder inOrder = inOrder(repository);
+		InOrder inOrder = inOrder(repository, logQuery);
 		inOrder.verify(repository).findById(CASH_GAME_ID);
+		inOrder.verify(logQuery, never()).findAllByCashGameId(CASH_GAME_ID);
 		inOrder.verifyNoMoreInteractions();
 	}
 
@@ -113,7 +118,7 @@ class CashGameServiceTest extends TestBase {
 
 		assertThat(cashGame.getStatus()).isEqualTo(IN_PROGRESS);
 
-		InOrder inOrder = inOrder(repository);
+		InOrder inOrder = inOrder(repository, logQuery);
 		inOrder.verify(repository).findById(CASH_GAME_ID);
 		inOrder.verify(repository).save(cashGame);
 		inOrder.verifyNoMoreInteractions();
@@ -126,7 +131,7 @@ class CashGameServiceTest extends TestBase {
 		assertThatThrownBy(() -> service.playCashGame(CASH_GAME_ID)).isInstanceOf(ResourceNotFoundException.class)
 			.hasMessage("Cash Game not found with id: " + CASH_GAME_ID);
 
-		InOrder inOrder = inOrder(repository);
+		InOrder inOrder = inOrder(repository, logQuery);
 		inOrder.verify(repository).findById(CASH_GAME_ID);
 		inOrder.verifyNoMoreInteractions();
 	}
@@ -139,7 +144,7 @@ class CashGameServiceTest extends TestBase {
 		assertThatThrownBy(() -> service.playCashGame(CASH_GAME_ID)).isInstanceOf(BusinessException.class)
 			.hasMessage("Cannot start a cash game that is already finished.");
 
-		InOrder inOrder = inOrder(repository);
+		InOrder inOrder = inOrder(repository, logQuery);
 		inOrder.verify(repository).findById(CASH_GAME_ID);
 		inOrder.verifyNoMoreInteractions();
 	}
@@ -150,7 +155,7 @@ class CashGameServiceTest extends TestBase {
 
 		service.deleteCashGame(CASH_GAME_ID);
 
-		InOrder inOrder = inOrder(repository);
+		InOrder inOrder = inOrder(repository, logQuery);
 		inOrder.verify(repository).existsById(CASH_GAME_ID);
 		inOrder.verify(repository).deleteById(CASH_GAME_ID);
 		inOrder.verifyNoMoreInteractions();
@@ -163,7 +168,7 @@ class CashGameServiceTest extends TestBase {
 		assertThatThrownBy(() -> service.deleteCashGame(CASH_GAME_ID)).isInstanceOf(ResourceNotFoundException.class)
 			.hasMessage("Cash Game not found with id: " + CASH_GAME_ID);
 
-		InOrder inOrder = inOrder(repository);
+		InOrder inOrder = inOrder(repository, logQuery);
 		inOrder.verify(repository).existsById(CASH_GAME_ID);
 		inOrder.verifyNoMoreInteractions();
 	}
@@ -175,7 +180,7 @@ class CashGameServiceTest extends TestBase {
 
 		assertThatCode(() -> service.updateCashGame(CASH_GAME_ID, request)).doesNotThrowAnyException();
 
-		InOrder inOrder = inOrder(repository);
+		InOrder inOrder = inOrder(repository, logQuery);
 		inOrder.verify(repository).existsById(CASH_GAME_ID);
 		inOrder.verify(repository).save(request.to(CASH_GAME_ID));
 		inOrder.verifyNoMoreInteractions();
@@ -190,8 +195,39 @@ class CashGameServiceTest extends TestBase {
 			.isInstanceOf(ResourceNotFoundException.class)
 			.hasMessage("Cash Game not found with id: " + CASH_GAME_ID);
 
-		InOrder inOrder = inOrder(repository);
+		InOrder inOrder = inOrder(repository, logQuery);
 		inOrder.verify(repository).existsById(CASH_GAME_ID);
+		inOrder.verifyNoMoreInteractions();
+	}
+
+	@Test
+	void should_add_player() {
+		CashGame cashGame = valid(CashGame.class);
+		CashGamePlayerRequest playerRequest = valid(CashGamePlayerRequest.class);
+		when(repository.findById(CASH_GAME_ID)).thenReturn(Optional.of(cashGame));
+
+		CashGamePlayer player = playerRequest.to();
+		cashGame.addPlayer(player);
+
+		assertThat(service.addPlayer(CASH_GAME_ID, playerRequest)).isEqualTo(CashGamePlayerResponse.of(player));
+
+		InOrder inOrder = inOrder(repository, logQuery);
+		inOrder.verify(repository).findById(CASH_GAME_ID);
+		inOrder.verify(repository).save(cashGame);
+		inOrder.verifyNoMoreInteractions();
+	}
+
+	@Test
+	void should_throw_exception_when_trying_to_add_player_on_missing_cash_game() {
+		CashGamePlayerRequest playerRequest = valid(CashGamePlayerRequest.class);
+		when(repository.findById(CASH_GAME_ID)).thenReturn(Optional.empty());
+
+		assertThatThrownBy(() -> service.addPlayer(CASH_GAME_ID, playerRequest))
+			.isInstanceOf(ResourceNotFoundException.class)
+			.hasMessage("Cash Game not found with id: " + CASH_GAME_ID);
+
+		InOrder inOrder = inOrder(repository, logQuery);
+		inOrder.verify(repository).findById(CASH_GAME_ID);
 		inOrder.verifyNoMoreInteractions();
 	}
 

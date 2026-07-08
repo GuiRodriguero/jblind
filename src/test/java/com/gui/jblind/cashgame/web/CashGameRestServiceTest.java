@@ -134,4 +134,27 @@ class CashGameRestServiceTest extends TestBase {
 		verify(service).updateCashGame(eq(CASH_GAME_ID), any());
 	}
 
+	@Test
+	void should_add_player() throws Exception {
+		CashGamePlayerResponse response = Instancio.create(CashGamePlayerResponse.class);
+		when(service.addPlayer(eq(CASH_GAME_ID), any())).thenReturn(response);
+
+		mockMvc
+			.perform(post("/v1/cashgames/" + CASH_GAME_ID + "/players").contentType(MediaType.APPLICATION_JSON)
+				.content("""
+						{
+						  "name": "Player Name"
+						}
+						"""))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.id").value(response.id()))
+			.andExpect(jsonPath("$.name").value(response.name()))
+			.andExpect(jsonPath("$.totalInvested").value(response.totalInvested().doubleValue()))
+			.andExpect(jsonPath("$.currentStack").value(response.currentStack().doubleValue()));
+
+		InOrder inOrder = inOrder(service);
+		inOrder.verify(service).addPlayer(eq(CASH_GAME_ID), any());
+		inOrder.verifyNoMoreInteractions();
+	}
+
 }

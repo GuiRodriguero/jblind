@@ -17,8 +17,8 @@ class CashGamePlayerResponseTest extends TestBase {
 	void should_instantiate_from_entity() {
 		CashGamePlayer entity = valid(CashGamePlayer.class);
 
-		assertThat(CashGamePlayerResponse.of(entity))
-			.isEqualTo(new CashGamePlayerResponse(entity.getId(), entity.getName()));
+		assertThat(CashGamePlayerResponse.of(entity)).isEqualTo(new CashGamePlayerResponse(entity.getId(),
+				entity.getName(), entity.getTotalInvested(), entity.getCurrentStack()));
 	}
 
 }

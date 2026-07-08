@@ -15,14 +15,19 @@ public class CashGameLogService {
 
 	private final CashGameLogRepository repository;
 
+	private final CashGamePlayerService playerService;
+
 	public CashGameLogResponse createLog(String cashGameId, CashGameLogRequest request) {
 		CashGameLog log = CashGameLog.builder()
 			.cashGameId(cashGameId)
+			.playerId(request.cashGamePlayerId())
 			.type(request.type())
 			.amount(request.amount())
 			.message(request.message())
 			.timestamp(LocalDateTime.now())
 			.build();
+
+		playerService.updatePlayerStats(request);
 
 		return CashGameLogResponse.from(repository.save(log));
 	}

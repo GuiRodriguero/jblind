@@ -1,8 +1,6 @@
 package com.gui.jblind.cashgame;
 
-import com.gui.jblind.cashgame.web.CashGameDetailResponse;
-import com.gui.jblind.cashgame.web.CashGameRequest;
-import com.gui.jblind.cashgame.web.CashGameSummaryResponse;
+import com.gui.jblind.cashgame.web.*;
 import com.gui.jblind.core.exception.BusinessException;
 import com.gui.jblind.core.exception.ResourceNotFoundException;
 import lombok.AllArgsConstructor;
@@ -20,6 +18,8 @@ public class CashGameService {
 
 	private final CashGameRepository repository;
 
+	private final CashGameLogQuery logQuery;
+
 	public String createCashGame(CashGameRequest request) {
 		return repository.save(request.to()).getId();
 	}
@@ -31,9 +31,10 @@ public class CashGameService {
 
 	@Transactional(readOnly = true)
 	public CashGameDetailResponse getCashGameById(String id) {
-		return repository.findById(id)
-			.map(CashGameDetailResponse::of)
+		CashGame cashGame = repository.findById(id)
 			.orElseThrow(() -> new ResourceNotFoundException("Cash Game not found with id: " + id));
+
+		return CashGameDetailResponse.of(cashGame, logQuery.findAllByCashGameId(id));
 	}
 
 	public void playCashGame(String id) {
@@ -61,6 +62,17 @@ public class CashGameService {
 		}
 
 		repository.save(request.to(id));
+	}
+
+	public CashGamePlayerResponse addPlayer(String id, CashGamePlayerRequest request) {
+		CashGame cashGame = repository.findById(id)
+			.orElseThrow(() -> new ResourceNotFoundException("Cash Game not found with id: " + id));
+
+		CashGamePlayer player = request.to();
+		cashGame.addPlayer(player);
+		repository.save(cashGame);
+
+		return CashGamePlayerResponse.of(player);
 	}
 
 }
