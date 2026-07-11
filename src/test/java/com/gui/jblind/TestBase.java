@@ -8,6 +8,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -34,6 +35,10 @@ public abstract class TestBase {
 
 	public static <T> T valid(Class<T> type) {
 		return Instancio.of(type).create();
+	}
+
+	public static <T> List<T> valid(Class<T> type, Integer size) {
+		return Instancio.ofList(type).size(size).create();
 	}
 
 	protected <T> MockedStatic<T> getMockedStatic(Class<T> classToMock) {

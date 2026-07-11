@@ -19,9 +19,12 @@ class CashGameLogServiceTest extends TestBase {
 	@Mock
 	private CashGameLogRepository repository;
 
+	@Mock
+	private CashGamePlayerService playerService;
+
 	@Override
 	public void init() {
-		service = new CashGameLogService(repository);
+		service = new CashGameLogService(repository, playerService);
 	}
 
 	@Test
@@ -33,9 +36,10 @@ class CashGameLogServiceTest extends TestBase {
 
 		assertThat(service.createLog("cashGameId", request)).isEqualTo(CashGameLogResponse.from(log));
 
-		InOrder order = inOrder(repository);
-		order.verify(repository).save(any(CashGameLog.class));
-		order.verifyNoMoreInteractions();
+		InOrder inOrder = inOrder(repository, playerService);
+		inOrder.verify(playerService).updatePlayerStats(request);
+		inOrder.verify(repository).save(any(CashGameLog.class));
+		inOrder.verifyNoMoreInteractions();
 	}
 
 }

@@ -17,8 +17,9 @@ class CashGameLogResponseTest extends TestBase {
 
 	@Test
 	void should_instantiate_from_entity() {
-		assertThat(CashGameLogResponse.from(entity)).isEqualTo(new CashGameLogResponse(entity.getId(), entity.getType(),
-				entity.getAmount(), entity.getMessage(), entity.getTimestamp()));
+		assertThat(CashGameLogResponse.from(entity))
+			.isEqualTo(new CashGameLogResponse(entity.getId(), entity.getPlayerId(), entity.getType(),
+					entity.getAmount(), entity.getMessage(), entity.getTimestamp()));
 	}
 
 }
