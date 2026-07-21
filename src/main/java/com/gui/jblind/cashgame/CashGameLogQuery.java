@@ -1,6 +1,5 @@
 package com.gui.jblind.cashgame;
 
-import com.gui.jblind.cashgame.web.CashGameLogResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,11 +13,8 @@ class CashGameLogQuery {
 
 	private final CashGameLogRepository repository;
 
-	List<CashGameLogResponse> findAllByCashGameId(String cashGameId) {
-		return repository.findAllByCashGameIdOrderByTimestampDesc(cashGameId)
-			.stream()
-			.map(CashGameLogResponse::from)
-			.toList();
+	List<CashGameLog> findAllByCashGameId(String cashGameId) {
+		return repository.findAllByCashGameIdOrderByTimestampDesc(cashGameId);
 	}
 
 }

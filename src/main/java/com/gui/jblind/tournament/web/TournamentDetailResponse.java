@@ -8,15 +8,16 @@ import java.util.List;
 
 public record TournamentDetailResponse(String id, String name, LocalDateTime scheduledAt, Integer expectedPlayers,
 		BigDecimal buyIn, Integer startingStack, String status, boolean allowRebuys, boolean allowAddOn,
-		List<TournamentLevelResponse> levels, List<TournamentPlayerResponse> players, TournamentPrizeResponse prize) {
+		List<TournamentLevelResponse> levels, List<TournamentPlayerResponse> players, TournamentPrizeResponse prize,
+		List<TournamentLogResponse> logs) {
 
-	public static TournamentDetailResponse of(Tournament entity) {
+	public static TournamentDetailResponse of(Tournament entity, List<TournamentLogResponse> logs) {
 		return new TournamentDetailResponse(entity.getId(), entity.getName(), entity.getScheduledAt(),
 				entity.getExpectedPlayers(), entity.getBuyIn(), entity.getStartingStack(), entity.getStatus().name(),
 				entity.isAllowRebuys(), entity.isAllowAddOn(),
 				entity.getLevels().stream().map(TournamentLevelResponse::of).toList(),
 				entity.getPlayers().stream().map(TournamentPlayerResponse::of).toList(),
-				TournamentPrizeResponse.of(entity.getPrize()));
+				TournamentPrizeResponse.of(entity.getPrize()), logs);
 	}
 
 }

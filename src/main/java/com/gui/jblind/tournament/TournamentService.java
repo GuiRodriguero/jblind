@@ -3,6 +3,7 @@ package com.gui.jblind.tournament;
 import com.gui.jblind.core.exception.BusinessException;
 import com.gui.jblind.core.exception.ResourceNotFoundException;
 import com.gui.jblind.tournament.web.TournamentDetailResponse;
+import com.gui.jblind.tournament.web.TournamentLogResponse;
 import com.gui.jblind.tournament.web.TournamentRequest;
 import com.gui.jblind.tournament.web.TournamentSummaryResponse;
 import lombok.AllArgsConstructor;
@@ -20,6 +21,8 @@ public class TournamentService {
 
 	private final TournamentRepository repository;
 
+	private final TournamentLogQuery logQuery;
+
 	public String createTournament(TournamentRequest request) {
 		return repository.save(request.to()).getId();
 	}
@@ -31,9 +34,11 @@ public class TournamentService {
 
 	@Transactional(readOnly = true)
 	public TournamentDetailResponse getTournamentById(String id) {
-		return repository.findById(id)
-			.map(TournamentDetailResponse::of)
+		Tournament tournament = repository.findById(id)
 			.orElseThrow(() -> new ResourceNotFoundException("Tournament not found with id: " + id));
+
+		return TournamentDetailResponse.of(tournament,
+				logQuery.findAllByTournamentId(id).stream().map(TournamentLogResponse::from).toList());
 	}
 
 	public void playTournament(String id) {
