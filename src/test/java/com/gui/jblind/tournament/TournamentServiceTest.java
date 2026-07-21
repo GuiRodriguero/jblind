@@ -4,6 +4,7 @@ import com.gui.jblind.TestBase;
 import com.gui.jblind.core.exception.BusinessException;
 import com.gui.jblind.core.exception.ResourceNotFoundException;
 import com.gui.jblind.tournament.web.TournamentDetailResponse;
+import com.gui.jblind.tournament.web.TournamentLogResponse;
 import com.gui.jblind.tournament.web.TournamentRequest;
 import com.gui.jblind.tournament.web.TournamentSummaryResponse;
 import org.junit.jupiter.api.Test;
@@ -31,9 +32,12 @@ class TournamentServiceTest extends TestBase {
 	@Mock
 	private TournamentRepository repository;
 
+	@Mock
+	private TournamentLogQuery logQuery;
+
 	@Override
 	public void init() {
-		service = new TournamentService(repository);
+		service = new TournamentService(repository, logQuery);
 	}
 
 	@Test
@@ -45,7 +49,7 @@ class TournamentServiceTest extends TestBase {
 
 		assertThat(service.createTournament(request)).isEqualTo(tournament.getId());
 
-		InOrder inOrder = inOrder(repository);
+		InOrder inOrder = inOrder(repository, logQuery);
 		inOrder.verify(repository).save(tournament);
 		inOrder.verifyNoMoreInteractions();
 	}
@@ -59,7 +63,7 @@ class TournamentServiceTest extends TestBase {
 
 		assertThat(result).containsExactly(TournamentSummaryResponse.of(tournament));
 
-		InOrder inOrder = inOrder(repository);
+		InOrder inOrder = inOrder(repository, logQuery);
 		inOrder.verify(repository).findAll();
 		inOrder.verifyNoMoreInteractions();
 	}
@@ -72,7 +76,7 @@ class TournamentServiceTest extends TestBase {
 
 		assertThat(result).isEmpty();
 
-		InOrder inOrder = inOrder(repository);
+		InOrder inOrder = inOrder(repository, logQuery);
 		inOrder.verify(repository).findAll();
 		inOrder.verifyNoMoreInteractions();
 	}
@@ -80,14 +84,19 @@ class TournamentServiceTest extends TestBase {
 	@Test
 	void should_get_tournament_by_id() {
 		Tournament tournament = valid(Tournament.class);
+		List<TournamentLog> logs = valid(TournamentLog.class, 3);
+
 		when(repository.findById(TOURNAMENT_ID)).thenReturn(Optional.of(tournament));
+		when(logQuery.findAllByTournamentId(TOURNAMENT_ID)).thenReturn(logs);
 
 		TournamentDetailResponse result = service.getTournamentById(TOURNAMENT_ID);
 
-		assertThat(result).isEqualTo(TournamentDetailResponse.of(tournament));
+		assertThat(result).isEqualTo(
+				TournamentDetailResponse.of(tournament, logs.stream().map(TournamentLogResponse::from).toList()));
 
-		InOrder inOrder = inOrder(repository);
+		InOrder inOrder = inOrder(repository, logQuery);
 		inOrder.verify(repository).findById(TOURNAMENT_ID);
+		inOrder.verify(logQuery).findAllByTournamentId(TOURNAMENT_ID);
 		inOrder.verifyNoMoreInteractions();
 	}
 
@@ -98,7 +107,7 @@ class TournamentServiceTest extends TestBase {
 		assertThatThrownBy(() -> service.getTournamentById(TOURNAMENT_ID)).isInstanceOf(ResourceNotFoundException.class)
 			.hasMessage("Tournament not found with id: " + TOURNAMENT_ID);
 
-		InOrder inOrder = inOrder(repository);
+		InOrder inOrder = inOrder(repository, logQuery);
 		inOrder.verify(repository).findById(TOURNAMENT_ID);
 		inOrder.verifyNoMoreInteractions();
 	}
@@ -113,7 +122,7 @@ class TournamentServiceTest extends TestBase {
 
 		assertThat(tournament.getStatus()).isEqualTo(IN_PROGRESS);
 
-		InOrder inOrder = inOrder(repository);
+		InOrder inOrder = inOrder(repository, logQuery);
 		inOrder.verify(repository).findById(TOURNAMENT_ID);
 		inOrder.verify(repository).save(tournament);
 		inOrder.verifyNoMoreInteractions();
@@ -126,7 +135,7 @@ class TournamentServiceTest extends TestBase {
 		assertThatThrownBy(() -> service.playTournament(TOURNAMENT_ID)).isInstanceOf(ResourceNotFoundException.class)
 			.hasMessage("Tournament not found with id: " + TOURNAMENT_ID);
 
-		InOrder inOrder = inOrder(repository);
+		InOrder inOrder = inOrder(repository, logQuery);
 		inOrder.verify(repository).findById(TOURNAMENT_ID);
 		inOrder.verifyNoMoreInteractions();
 	}
@@ -139,7 +148,7 @@ class TournamentServiceTest extends TestBase {
 		assertThatThrownBy(() -> service.playTournament(TOURNAMENT_ID)).isInstanceOf(BusinessException.class)
 			.hasMessage("Cannot start a tournament that is already finished.");
 
-		InOrder inOrder = inOrder(repository);
+		InOrder inOrder = inOrder(repository, logQuery);
 		inOrder.verify(repository).findById(TOURNAMENT_ID);
 		inOrder.verifyNoMoreInteractions();
 	}
@@ -150,7 +159,7 @@ class TournamentServiceTest extends TestBase {
 
 		service.deleteTournament(TOURNAMENT_ID);
 
-		InOrder inOrder = inOrder(repository);
+		InOrder inOrder = inOrder(repository, logQuery);
 		inOrder.verify(repository).existsById(TOURNAMENT_ID);
 		inOrder.verify(repository).deleteById(TOURNAMENT_ID);
 		inOrder.verifyNoMoreInteractions();
@@ -163,7 +172,7 @@ class TournamentServiceTest extends TestBase {
 		assertThatThrownBy(() -> service.deleteTournament(TOURNAMENT_ID)).isInstanceOf(ResourceNotFoundException.class)
 			.hasMessage("Tournament not found with id: " + TOURNAMENT_ID);
 
-		InOrder inOrder = inOrder(repository);
+		InOrder inOrder = inOrder(repository, logQuery);
 		inOrder.verify(repository).existsById(TOURNAMENT_ID);
 		inOrder.verifyNoMoreInteractions();
 	}
@@ -175,7 +184,7 @@ class TournamentServiceTest extends TestBase {
 
 		assertThatCode(() -> service.updateTournament(TOURNAMENT_ID, request)).doesNotThrowAnyException();
 
-		InOrder inOrder = inOrder(repository);
+		InOrder inOrder = inOrder(repository, logQuery);
 		inOrder.verify(repository).existsById(TOURNAMENT_ID);
 		inOrder.verify(repository).save(request.to(TOURNAMENT_ID));
 		inOrder.verifyNoMoreInteractions();
@@ -190,7 +199,7 @@ class TournamentServiceTest extends TestBase {
 			.isInstanceOf(ResourceNotFoundException.class)
 			.hasMessage("Tournament not found with id: " + TOURNAMENT_ID);
 
-		InOrder inOrder = inOrder(repository);
+		InOrder inOrder = inOrder(repository, logQuery);
 		inOrder.verify(repository).existsById(TOURNAMENT_ID);
 		inOrder.verifyNoMoreInteractions();
 	}
