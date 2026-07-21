@@ -80,14 +80,15 @@ class CashGameServiceTest extends TestBase {
 	@Test
 	void should_get_cash_game_by_id() {
 		CashGame cashGame = valid(CashGame.class);
-		List<CashGameLogResponse> logs = valid(CashGameLogResponse.class, 3);
+		List<CashGameLog> logs = valid(CashGameLog.class, 3);
 
 		when(repository.findById(CASH_GAME_ID)).thenReturn(Optional.of(cashGame));
 		when(logQuery.findAllByCashGameId(CASH_GAME_ID)).thenReturn(logs);
 
 		CashGameDetailResponse result = service.getCashGameById(CASH_GAME_ID);
 
-		assertThat(result).isEqualTo(CashGameDetailResponse.of(cashGame, logs));
+		assertThat(result)
+			.isEqualTo(CashGameDetailResponse.of(cashGame, logs.stream().map(CashGameLogResponse::from).toList()));
 
 		InOrder inOrder = inOrder(repository, logQuery);
 		inOrder.verify(repository).findById(CASH_GAME_ID);

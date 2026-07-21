@@ -34,7 +34,8 @@ public class CashGameService {
 		CashGame cashGame = repository.findById(id)
 			.orElseThrow(() -> new ResourceNotFoundException("Cash Game not found with id: " + id));
 
-		return CashGameDetailResponse.of(cashGame, logQuery.findAllByCashGameId(id));
+		return CashGameDetailResponse.of(cashGame,
+				logQuery.findAllByCashGameId(id).stream().map(CashGameLogResponse::from).toList());
 	}
 
 	public void playCashGame(String id) {

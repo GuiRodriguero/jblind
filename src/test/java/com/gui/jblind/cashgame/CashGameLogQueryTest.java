@@ -1,7 +1,6 @@
 package com.gui.jblind.cashgame;
 
 import com.gui.jblind.TestBase;
-import com.gui.jblind.cashgame.web.CashGameLogResponse;
 import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
 import org.mockito.Mock;
@@ -31,8 +30,7 @@ class CashGameLogQueryTest extends TestBase {
 
 		when(repository.findAllByCashGameIdOrderByTimestampDesc(cashGameId)).thenReturn(logs);
 
-		assertThat(query.findAllByCashGameId(cashGameId))
-			.isEqualTo(logs.stream().map(CashGameLogResponse::from).toList());
+		assertThat(query.findAllByCashGameId(cashGameId)).isEqualTo(logs);
 
 		InOrder inOrder = inOrder(repository);
 		inOrder.verify(repository).findAllByCashGameIdOrderByTimestampDesc(cashGameId);
