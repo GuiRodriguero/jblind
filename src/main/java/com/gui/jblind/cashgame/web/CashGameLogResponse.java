@@ -6,7 +6,7 @@ import com.gui.jblind.cashgame.CashGameLogType;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-public record CashGameLogResponse(Long id, String playerId, CashGameLogType type, BigDecimal amount, String message,
+public record CashGameLogResponse(String id, String playerId, CashGameLogType type, BigDecimal amount, String message,
 		LocalDateTime timestamp) {
 
 	public static CashGameLogResponse from(CashGameLog log) {
