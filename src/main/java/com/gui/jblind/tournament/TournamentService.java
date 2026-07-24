@@ -13,11 +13,14 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import static com.gui.jblind.tournament.TournamentStatus.FINISHED;
+import static com.gui.jblind.tournament.TournamentStatus.IN_PROGRESS;
 
 @Service
 @AllArgsConstructor
 @Transactional(rollbackFor = Exception.class)
 public class TournamentService {
+
+	private final TournamentQuery query;
 
 	private final TournamentRepository repository;
 
@@ -34,22 +37,28 @@ public class TournamentService {
 
 	@Transactional(readOnly = true)
 	public TournamentDetailResponse getTournamentById(String id) {
-		Tournament tournament = repository.findById(id)
-			.orElseThrow(() -> new ResourceNotFoundException("Tournament not found with id: " + id));
-
-		return TournamentDetailResponse.of(tournament,
+		return TournamentDetailResponse.of(query.findById(id),
 				logQuery.findAllByTournamentId(id).stream().map(TournamentLogResponse::from).toList());
 	}
 
 	public void playTournament(String id) {
-		Tournament tournament = repository.findById(id)
-			.orElseThrow(() -> new ResourceNotFoundException("Tournament not found with id: " + id));
+		Tournament tournament = query.findById(id);
 
 		if (tournament.getStatus() == FINISHED) {
 			throw new BusinessException("Cannot start a tournament that is already finished.");
 		}
 
 		repository.save(tournament.startTournament());
+	}
+
+	public void finishTournament(String id) {
+		Tournament tournament = query.findById(id);
+
+		if (tournament.getStatus() != IN_PROGRESS) {
+			throw new BusinessException("Cannot finish a tournament that is not in progress.");
+		}
+
+		repository.save(tournament.finishTournament());
 	}
 
 	public void deleteTournament(String id) {

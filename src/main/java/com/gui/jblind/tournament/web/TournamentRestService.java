@@ -44,6 +44,12 @@ class TournamentRestService {
 		return ResponseEntity.noContent().build();
 	}
 
+	@PostMapping("/{id}/finish")
+	public ResponseEntity<Void> finishTournament(@PathVariable String id) {
+		service.finishTournament(id);
+		return ResponseEntity.noContent().build();
+	}
+
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deleteTournament(@PathVariable String id) {
 		service.deleteTournament(id);

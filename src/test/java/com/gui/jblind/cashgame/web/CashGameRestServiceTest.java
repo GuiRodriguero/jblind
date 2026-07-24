@@ -112,6 +112,13 @@ class CashGameRestServiceTest extends TestBase {
 	}
 
 	@Test
+	void should_finish_cash_game() throws Exception {
+		mockMvc.perform(post("/v1/cashgames/" + CASH_GAME_ID + "/finish")).andExpect(status().isNoContent());
+
+		verify(service).finishCashGame(CASH_GAME_ID);
+	}
+
+	@Test
 	void should_delete_cash_game() throws Exception {
 		mockMvc.perform(delete("/v1/cashgames/" + CASH_GAME_ID)).andExpect(status().isSeeOther());
 

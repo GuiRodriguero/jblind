@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import static jakarta.persistence.EnumType.STRING;
-import static jakarta.persistence.GenerationType.IDENTITY;
+import static java.util.UUID.randomUUID;
 import static lombok.AccessLevel.PACKAGE;
 import static lombok.AccessLevel.PRIVATE;
 
@@ -21,8 +21,8 @@ import static lombok.AccessLevel.PRIVATE;
 public class CashGameLog {
 
 	@Id
-	@GeneratedValue(strategy = IDENTITY)
-	private Long id;
+	@Builder.Default
+	private final String id = randomUUID().toString();
 
 	@Column(nullable = false)
 	private String cashGameId;
