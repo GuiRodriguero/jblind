@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.gui.jblind.tournament.TournamentStatus.FINISHED;
 import static com.gui.jblind.tournament.TournamentStatus.IN_PROGRESS;
 import static jakarta.persistence.CascadeType.ALL;
 import static java.util.UUID.randomUUID;
@@ -69,6 +70,11 @@ public class Tournament {
 
 	public Tournament startTournament() {
 		this.status = IN_PROGRESS;
+		return this;
+	}
+
+	public Tournament finishTournament() {
+		this.status = FINISHED;
 		return this;
 	}
 

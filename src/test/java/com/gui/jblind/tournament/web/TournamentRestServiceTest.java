@@ -108,6 +108,13 @@ class TournamentRestServiceTest extends TestBase {
 	}
 
 	@Test
+	void should_finish_tournament() throws Exception {
+		mockMvc.perform(post("/v1/tournaments/" + TOURNAMENT_ID + "/finish")).andExpect(status().isNoContent());
+
+		verify(service).finishTournament(TOURNAMENT_ID);
+	}
+
+	@Test
 	void should_delete_tournament() throws Exception {
 		mockMvc.perform(delete("/v1/tournaments/" + TOURNAMENT_ID)).andExpect(status().isSeeOther());
 
