@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.gui.jblind.cashgame.CashGameStatus.FINISHED;
 import static com.gui.jblind.cashgame.CashGameStatus.IN_PROGRESS;
 import static jakarta.persistence.CascadeType.ALL;
 import static java.util.UUID.randomUUID;
@@ -53,6 +54,11 @@ public class CashGame {
 
 	public CashGame start() {
 		this.status = IN_PROGRESS;
+		return this;
+	}
+
+	public CashGame finish() {
+		this.status = FINISHED;
 		return this;
 	}
 

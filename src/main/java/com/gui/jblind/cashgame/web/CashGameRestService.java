@@ -44,6 +44,12 @@ class CashGameRestService {
 		return ResponseEntity.noContent().build();
 	}
 
+	@PostMapping("/{id}/finish")
+	public ResponseEntity<Void> finishCashGame(@PathVariable String id) {
+		service.finishCashGame(id);
+		return ResponseEntity.noContent().build();
+	}
+
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deleteCashGame(@PathVariable String id) {
 		service.deleteCashGame(id);
