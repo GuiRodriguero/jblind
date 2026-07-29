@@ -19,18 +19,19 @@ class TournamentPlayerService {
 			return;
 		}
 		repository.findById(request.tournamentPlayerId()).ifPresent(player -> {
-			handlePlayerSessionBankroll(player, request.type(), request.amount(), request.finalPosition());
+			handlePlayerSessionBankroll(player, request.type(), request.amount(), request.playersLeft());
 			repository.save(player);
 		});
 	}
 
 	private void handlePlayerSessionBankroll(TournamentPlayer player, TournamentLogType type, BigDecimal amount,
-			Integer finalPosition) {
+			Integer playersLeft) {
 		switch (type) {
 			case ADD_ON -> player.addOn(amount);
 			case BUY_IN, REBUY -> player.addEntry(amount);
 			case ELIMINATION -> player.eliminate();
-			case LEFT -> player.finalPosition(finalPosition);
+			case LEFT -> player.finalPosition(playersLeft);
+			case CHAMPION -> player.finalPosition(1);
 		}
 	}
 

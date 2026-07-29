@@ -21,7 +21,7 @@ class TournamentPlayerRequestTest extends TestBase {
 	}
 
 	private TournamentPlayer expected(TournamentPlayerRequest request) {
-		return TournamentPlayer.builder().name(request.name()).build();
+		return TournamentPlayer.builder().name(request.name()).totalInvested(request.totalInvested()).build();
 	}
 
 }
