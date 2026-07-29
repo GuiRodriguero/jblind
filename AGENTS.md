@@ -56,7 +56,7 @@ Entities and concepts:
 
 - **`Tournament`** — the tournament. Has `buyIn`, `startingStack`, `expectedPlayers`, the `allowRebuys`/`allowAddOn` flags, `status`, the ordered list of `levels`, the list of `players`, and a `prize` (`@OneToOne`).
 - **`TournamentLevel`** — a level/round of the blind structure (`roundNumber`, `smallBlind`, `bigBlind`, `ante`, `durationInMinutes`, `isBreak`, `shouldColorUp`). Ordered by `roundNumber`.
-- **`TournamentPlayer`** — a player in the tournament. Statistics: `entries`, `eliminationsMade`, `totalInvested`, `addOn`, `finalPosition`. Rules on the entity: `addEntry`, `addOn`, `eliminate`, `finalPosition`.
+- **`TournamentPlayer`** — a player in the tournament. Statistics: `entries`, `eliminationsMade`, `totalInvested`, `addOn`, `playersLeft`. Rules on the entity: `addEntry`, `addOn`, `eliminate`, `playersLeft`.
 - **`TournamentPrize`** — the total prize pool (`total`), with a `mode` (`PrizeMode`) and the ordered list of `payouts`.
 - **`TournamentPrizePayout`** — how much each position receives (ordered by `position`).
 - **`TournamentLog`** — audit of tournament events.

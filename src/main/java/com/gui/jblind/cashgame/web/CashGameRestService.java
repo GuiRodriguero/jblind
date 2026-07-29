@@ -53,7 +53,7 @@ class CashGameRestService {
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deleteCashGame(@PathVariable String id) {
 		service.deleteCashGame(id);
-		return ResponseEntity.status(SEE_OTHER).header("Location", "http://localhost:5173/cash-games").build();
+		return ResponseEntity.status(SEE_OTHER).header("Location", "http://localhost:5173/cashgames").build();
 	}
 
 	@PutMapping("/{id}")

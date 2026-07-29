@@ -7,5 +7,5 @@ import jakarta.validation.constraints.PositiveOrZero;
 import java.math.BigDecimal;
 
 public record TournamentLogRequest(String tournamentPlayerId, @NotNull TournamentLogType type,
-		@NotNull @PositiveOrZero BigDecimal amount, String message, Integer finalPosition) {
+		@NotNull @PositiveOrZero BigDecimal amount, String message, Integer playersLeft) {
 }
