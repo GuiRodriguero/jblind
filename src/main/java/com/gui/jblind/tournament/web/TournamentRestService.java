@@ -53,7 +53,7 @@ class TournamentRestService {
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deleteTournament(@PathVariable String id) {
 		service.deleteTournament(id);
-		return ResponseEntity.status(SEE_OTHER).header("Location", "http://localhost:5173/tournaments").build();
+		return ResponseEntity.status(SEE_OTHER).header("Location", "http://localhost:8080/v1/tournaments").build();
 	}
 
 	@PutMapping("/{id}")
