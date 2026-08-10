@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Test;
 import static com.gui.jblind.tournament.PrizeMode.FIXED;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.gui.jblind.tournament.web.TournamentRequest.TournamentPrizeRequest;
+
 class TournamentPrizeRequestTest extends TestBase {
 
 	private final TournamentPrizeRequest request = valid(TournamentPrizeRequest.class);

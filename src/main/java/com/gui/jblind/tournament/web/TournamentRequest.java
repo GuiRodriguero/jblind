@@ -1,6 +1,10 @@
 package com.gui.jblind.tournament.web;
 
+import com.gui.jblind.tournament.PrizeMode;
 import com.gui.jblind.tournament.Tournament;
+import com.gui.jblind.tournament.TournamentLevel;
+import com.gui.jblind.tournament.TournamentPlayer;
+import com.gui.jblind.tournament.TournamentPrize;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -38,4 +42,44 @@ public record TournamentRequest(@NotBlank String name, @NotNull LocalDateTime sc
 	public Tournament to(String id) {
 		return to().toBuilder().id(id).build();
 	}
+
+	public record TournamentLevelRequest(Integer roundNumber, Integer smallBlind, Integer bigBlind, Integer ante,
+			Integer durationInMinutes, boolean isBreak, boolean shouldColorUp) {
+
+		public TournamentLevel to() {
+			return TournamentLevel.builder()
+				.roundNumber(roundNumber)
+				.smallBlind(smallBlind)
+				.bigBlind(bigBlind)
+				.ante(ante)
+				.durationInMinutes(durationInMinutes)
+				.isBreak(isBreak)
+				.shouldColorUp(shouldColorUp)
+				.build();
+		}
+
+	}
+
+	public record TournamentPlayerRequest(String name, BigDecimal totalInvested) {
+
+		public TournamentPlayer to() {
+			return TournamentPlayer.builder().name(name).totalInvested(totalInvested).build();
+		}
+
+	}
+
+	public record TournamentPrizeRequest(PrizeMode mode, List<TournamentPrizePayoutRequest> payouts) {
+
+		public TournamentPrize to() {
+			TournamentPrize prize = TournamentPrize.builder().mode(mode).build();
+
+			if (payouts != null) {
+				payouts.forEach(payout -> prize.addPayout(payout.to()));
+			}
+
+			return prize;
+		}
+
+	}
+
 }

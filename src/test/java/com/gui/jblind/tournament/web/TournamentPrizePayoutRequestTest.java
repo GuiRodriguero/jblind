@@ -20,6 +20,12 @@ class TournamentPrizePayoutRequestTest extends TestBase {
 		assertThat(request.to()).isEqualTo(expected(request));
 	}
 
+	@Test
+	void should_convert_to_entity_with_id() {
+		String id = "some-id";
+		assertThat(request.to(id)).isEqualTo(expected(request).toBuilder().id(id).build());
+	}
+
 	private TournamentPrizePayout expected(TournamentPrizePayoutRequest request) {
 		return TournamentPrizePayout.builder()
 			.position(request.position())

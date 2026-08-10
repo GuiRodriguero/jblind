@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.gui.jblind.tournament.web.TournamentRequest.TournamentLevelRequest;
+
 class TournamentLevelRequestTest extends TestBase {
 
 	private final TournamentLevelRequest request = valid(TournamentLevelRequest.class);
