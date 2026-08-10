@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 import static com.gui.jblind.TestBase.valid;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.gui.jblind.tournament.web.TournamentDetailResponse.TournamentLevelResponse;
+
 class TournamentLevelResponseTest {
 
 	private final TournamentLevel entity = valid(TournamentLevel.class);

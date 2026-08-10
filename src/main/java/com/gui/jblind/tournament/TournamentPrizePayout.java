@@ -14,7 +14,7 @@ import static lombok.AccessLevel.PRIVATE;
 @Table
 @Entity
 @Getter
-@Builder
+@Builder(toBuilder = true)
 @EqualsAndHashCode
 @NoArgsConstructor(access = PRIVATE)
 @AllArgsConstructor(staticName = "of", access = PACKAGE)

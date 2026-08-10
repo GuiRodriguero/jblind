@@ -8,6 +8,10 @@ import java.util.List;
 import static com.gui.jblind.TestBase.valid;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.gui.jblind.tournament.web.TournamentDetailResponse.TournamentLevelResponse;
+import com.gui.jblind.tournament.web.TournamentDetailResponse.TournamentPlayerResponse;
+import com.gui.jblind.tournament.web.TournamentDetailResponse.TournamentPrizeResponse;
+
 class TournamentDetailResponseTest {
 
 	private final Tournament entity = valid(Tournament.class);
